@@ -1,0 +1,30 @@
+kind: pipeline
+
+name: GNU GCC TC ARM BUILD
+
+clone:
+
+  disable: true
+
+steps:
+
+- name: GNU GCC ARM
+
+  image: drone/drone-runner-docker:1.6.2-linux-arm64
+
+  environment:
+
+      GITHUB_TOKEN:
+
+        from_secret: GITHUB_TOKEN
+
+  commands:
+
+    - "export GITHUB_TOKEN"
+  
+    - apt install bc          bison           ca-certificates             ccache            clang             cmake          curl \            file       flex            gcc             g++            git             libelf-dev           libssl-dev          make          ninja-build         python3       texinfo            u-boot-tools             xz-utils             zlib1g-dev
+  
+    - git clone https://github.com/ClangBuiltLinux/tc-build && cd tc-build
+
+    - script -c "python build-llvm.py" /drone/src/build-arm-gnu-gcc.log
+
